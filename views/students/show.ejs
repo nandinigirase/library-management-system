@@ -1,0 +1,127 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title"><%= student.fullName %></h1>
+                    <div class="page-subtitle">Student library member profile and circulation history</div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/students/<%= student._id %>/edit" class="btn btn-imrd-primary">Edit Profile</a>
+                    <a href="/students" class="btn btn-outline-secondary">Back to Members</a>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">Member Snapshot</h2>
+                        </div>
+                        <div class="imrd-card-body">
+                            <div class="mb-2"><strong>Student ID:</strong> <%= student.studentId %></div>
+                            <div class="mb-2"><strong>Email:</strong> <%= student.email %></div>
+                            <div class="mb-2"><strong>Phone:</strong> <%= student.phone %></div>
+                            <div class="mb-2"><strong>Department:</strong> <%= student.department %></div>
+                            <div class="mb-2"><strong>Academic Year:</strong> <%= student.academicYear %></div>
+                            <div class="mb-2"><strong>Status:</strong> <span class="badge <%= student.status === 'Active' ? 'bg-success' : 'bg-secondary' %>"><%= student.status %></span></div>
+                            <div class="mb-2"><strong>Issued Books:</strong> <%= student.currentIssuedCount || 0 %> / <%= student.maxAllowedBooks %></div>
+                            <div class="mb-0"><strong>Gender:</strong> <%= student.gender || 'Not specified' %></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">Address & Notes</h2>
+                        </div>
+                        <div class="imrd-card-body">
+                            <p class="mb-0"><%= student.address || 'No address provided yet.' %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imrd-card mb-4">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Currently Issued</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (activeIssues && activeIssues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Call Number</th>
+                                        <th>Issue Date</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% activeIssues.forEach(issue => { %>
+                                        <tr>
+                                            <td><%= issue.book ? issue.book.title : 'Unknown Book' %></td>
+                                            <td><%= issue.book ? issue.book.callNumber : '-' %></td>
+                                            <td><%= new Date(issue.issueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><%= new Date(issue.dueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><span class="badge bg-warning text-dark"><%= issue.status %></span></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No books are currently issued to this member.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="imrd-card">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Return History</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (pastIssues && pastIssues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Issue Date</th>
+                                        <th>Return Date</th>
+                                        <th>Fine</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% pastIssues.forEach(issue => { %>
+                                        <tr>
+                                            <td><%= issue.book ? issue.book.title : 'Unknown Book' %></td>
+                                            <td><%= new Date(issue.issueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><%= issue.returnDate ? new Date(issue.returnDate).toLocaleDateString('en-GB') : '-' %></td>
+                                            <td>₹<%= issue.fineAmount || 0 %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No prior circulation records available.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

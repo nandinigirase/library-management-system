@@ -1,0 +1,86 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Overdue Books & Fines</h1>
+                    <div class="page-subtitle">Monitor outstanding returns and settle balances</div>
+                </div>
+                <div>
+                    <a href="/circulation/return" class="btn btn-outline-secondary">Return Desk</a>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-body">
+                            <div class="text-muted small text-uppercase">Outstanding Fine</div>
+                            <div class="fs-3 fw-bold text-danger">₹<%= totalOverdueFine || 0 %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-body">
+                            <div class="text-muted small text-uppercase">Fine Rate</div>
+                            <div class="fs-3 fw-bold text-warning">₹<%= ratePerDay || 5 %> / day</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imrd-card">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Overdue Loan List</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (overdues && overdues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Book</th>
+                                        <th>Due Date</th>
+                                        <th>Days Overdue</th>
+                                        <th>Fine</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% overdues.forEach(issue => { %>
+                                        <tr>
+                                            <td><%= issue.student ? issue.student.fullName : 'Unknown' %></td>
+                                            <td><%= issue.book ? issue.book.title : 'Unknown Book' %></td>
+                                            <td><%= new Date(issue.dueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><%= issue.overdueDays || 0 %></td>
+                                            <td>₹<%= issue.fine || 0 %></td>
+                                            <td>
+                                                <form action="/circulation/fine-pay/<%= issue._id %>" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Mark Paid</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No overdue books at the moment.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

@@ -1,0 +1,350 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <!-- Page Header with Welcome & Quick Action Shortcuts -->
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Executive Library Dashboard</h1>
+                    <div class="page-subtitle">
+                        Institute of Management Research & Development, Shahada • Real-time circulation analytics
+                    </div>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/circulation/issue" class="btn btn-imrd-gold">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Issue Book
+                    </a>
+                    <a href="/circulation/return" class="btn btn-imrd-primary">
+                        <i class="fa-solid fa-arrow-down-left-and-up-right-to-center"></i> Return Desk
+                    </a>
+                    <a href="/books/new" class="btn btn-outline-dark">
+                        <i class="fa-solid fa-book-medical"></i> Add Book
+                    </a>
+                    <a href="/students/new" class="btn btn-outline-secondary">
+                        <i class="fa-solid fa-user-plus"></i> Add Student
+                    </a>
+                </div>
+            </div>
+
+            <!-- Primary 6 Statistical Metric Cards -->
+            <div class="row g-3 mb-4">
+                <!-- Total Books -->
+                <div class="col-sm-6 col-xl-2">
+                    <div class="metric-card card-navy">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Books</span>
+                            <div class="metric-icon-box">
+                                <i class="fa-solid fa-book-open text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value"><%= stats.totalCopies %></div>
+                        <div class="metric-caption">
+                            <span><i class="fa-solid fa-layer-group text-primary"></i> <%= stats.totalTitles %> Distinct Titles</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Books -->
+                <div class="col-sm-6 col-xl-2">
+                    <div class="metric-card card-emerald">
+                        <div class="metric-header">
+                            <span class="metric-title">Available Books</span>
+                            <div class="metric-icon-box">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-success"><%= stats.availableCopies %></div>
+                        <div class="metric-caption">
+                            <span><i class="fa-solid fa-circle-check text-success"></i> In library stacks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Issued Books -->
+                <div class="col-sm-6 col-xl-2">
+                    <div class="metric-card card-sapphire">
+                        <div class="metric-header">
+                            <span class="metric-title">Issued Books</span>
+                            <div class="metric-icon-box">
+                                <i class="fa-solid fa-file-lines text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-primary"><%= stats.issuedBooksCount %></div>
+                        <div class="metric-caption">
+                            <span><i class="fa-solid fa-arrows-spin text-primary"></i> Currently on loan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overdue Books -->
+                <div class="col-sm-6 col-xl-2">
+                    <div class="metric-card card-crimson">
+                        <div class="metric-header">
+                            <span class="metric-title">Overdue Books</span>
+                            <div class="metric-icon-box">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-danger"><%= stats.overdueBooksCount %></div>
+                        <div class="metric-caption">
+                            <span><i class="fa-solid fa-calendar-xmark text-danger"></i> Past due date</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Returned Books -->
+                <div class="col-sm-6 col-xl-2">
+                    <div class="metric-card card-amethyst">
+                        <div class="metric-header">
+                            <span class="metric-title">Returned Books</span>
+                            <div class="metric-icon-box">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value"><%= stats.returnedBooksCount %></div>
+                        <div class="metric-caption">
+                            <span><i class="fa-solid fa-check-double text-purple"></i> Completed loans</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Students -->
+                <div class="col-sm-6 col-xl-2">
+                    <div class="metric-card card-gold">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Students</span>
+                            <div class="metric-icon-box">
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-warning"><%= stats.totalStudents %></div>
+                        <div class="metric-caption">
+                            <span><i class="fa-solid fa-id-card text-warning"></i> Active members</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fines Overview Mini Strip -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="p-3 bg-white border rounded-3 d-flex align-items-center justify-content-between shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="badge bg-success-subtle text-success p-3 rounded-circle fs-5">
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">Total Fines Collected</div>
+                                <div class="fs-4 fw-bold text-success">₹<%= stats.finesCollected.toLocaleString('en-IN') %></div>
+                            </div>
+                        </div>
+                        <span class="badge bg-success rounded-pill px-3 py-2">Settled</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-white border rounded-3 d-flex align-items-center justify-content-between shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="badge bg-danger-subtle text-danger p-3 rounded-circle fs-5">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">Pending Late Fines</div>
+                                <div class="fs-4 fw-bold text-danger">₹<%= stats.finesPending.toLocaleString('en-IN') %></div>
+                            </div>
+                        </div>
+                        <a href="/circulation/overdue" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                            Review Notices <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Charts Row -->
+            <div class="row g-4 mb-4">
+                <!-- Doughnut Chart: Categories -->
+                <div class="col-lg-5">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">
+                                <i class="fa-solid fa-chart-pie text-warning"></i>
+                                <span>Catalog by Discipline</span>
+                            </h2>
+                            <span class="text-muted small">Total Physical Stock</span>
+                        </div>
+                        <div class="imrd-card-body d-flex flex-column justify-content-center">
+                            <div style="height: 290px; position: relative;">
+                                <canvas id="categoryDoughnutChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart: Department Borrowing Activity -->
+                <div class="col-lg-7">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">
+                                <i class="fa-solid fa-chart-column text-primary"></i>
+                                <span>Department Library Engagement</span>
+                            </h2>
+                            <span class="text-muted small">MCA • MBA • BCA • BBA</span>
+                        </div>
+                        <div class="imrd-card-body">
+                            <div style="height: 290px; position: relative;">
+                                <canvas id="deptBarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overdue Noticeboard & Recent Activities -->
+            <div class="row g-4">
+                <!-- Overdue Alert Box -->
+                <div class="col-lg-6">
+                    <div class="imrd-card h-100 border-danger">
+                        <div class="imrd-card-header bg-danger-subtle border-danger">
+                            <h2 class="imrd-card-title text-danger">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span>Urgent Overdue Alerts</span>
+                            </h2>
+                            <a href="/circulation/overdue" class="btn btn-sm btn-danger rounded-pill">View All (<%= stats.overdueBooksCount %>)</a>
+                        </div>
+                        <div class="imrd-card-body p-0">
+                            <% if (overdueAlerts && overdueAlerts.length > 0) { %>
+                                <div class="table-responsive">
+                                    <table class="table imrd-table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Student</th>
+                                                <th>Book Title</th>
+                                                <th>Due Date</th>
+                                                <th>Fine</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% overdueAlerts.forEach(item => { %>
+                                                <tr>
+                                                    <td>
+                                                        <div class="fw-bold"><%= item.student ? item.student.fullName : 'Unknown' %></div>
+                                                        <div class="small text-muted font-monospace"><%= item.student ? item.student.studentId : '' %></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="text-truncate" style="max-width: 170px;" title="<%= item.book ? item.book.title : '' %>">
+                                                            <%= item.book ? item.book.title : 'Deleted Book' %>
+                                                        </div>
+                                                        <span class="call-badge" style="font-size: 0.7rem;"><%= item.book ? item.book.callNumber : '' %></span>
+                                                    </td>
+                                                    <td class="text-danger fw-semibold">
+                                                        <%= new Date(item.dueDate).toLocaleDateString('en-GB') %>
+                                                    </td>
+                                                    <td class="text-danger fw-bold">
+                                                        ₹<%= item.fineAmount %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/circulation/return?q=<%= item.student ? item.student.studentId : '' %>" class="btn btn-sm btn-outline-danger">
+                                                            Return
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <% } else { %>
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-circle-check fs-1 text-success mb-2"></i>
+                                    <p class="mb-0">Excellent! No overdue books currently pending.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities Table -->
+                <div class="col-lg-6">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">
+                                <i class="fa-solid fa-list-check text-primary"></i>
+                                <span>Recent Circulation Logs</span>
+                            </h2>
+                            <a href="/reports" class="btn btn-sm btn-outline-secondary rounded-pill">Audit Trail</a>
+                        </div>
+                        <div class="imrd-card-body p-0">
+                            <% if (recentActivities && recentActivities.length > 0) { %>
+                                <div class="table-responsive">
+                                    <table class="table imrd-table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Book & Student</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                                <th>Slip</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% recentActivities.forEach(item => { %>
+                                                <tr>
+                                                    <td>
+                                                        <div class="fw-semibold text-truncate" style="max-width: 220px;">
+                                                            <%= item.book ? item.book.title : 'Book Title' %>
+                                                        </div>
+                                                        <div class="small text-muted">
+                                                            <i class="fa-solid fa-user small me-1"></i>
+                                                            <%= item.student ? item.student.fullName : 'Student' %> 
+                                                            <span class="badge bg-light text-dark border ms-1"><%= item.student ? item.student.department : '' %></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <% if (item.status === 'ISSUED') { %>
+                                                            <span class="status-badge status-issued">Issued</span>
+                                                        <% } else if (item.status === 'RETURNED') { %>
+                                                            <span class="status-badge status-returned">Returned</span>
+                                                        <% } else { %>
+                                                            <span class="status-badge status-overdue">Overdue</span>
+                                                        <% } %>
+                                                    </td>
+                                                    <td class="small text-muted font-monospace">
+                                                        <%= new Date(item.updatedAt || item.issueDate).toLocaleDateString('en-GB') %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/circulation/slip/<%= item._id %>" class="btn btn-sm btn-light border py-0 px-2" title="View Transaction Slip">
+                                                            <i class="fa-solid fa-receipt text-secondary"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <% } else { %>
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-inbox fs-1 mb-2"></i>
+                                    <p class="mb-0">No circulation activity recorded yet.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>
+
+<!-- Inject Chart.js Data into Window Object -->
+<script>
+    window.categoryChartData = <%- JSON.stringify(categoryCounts) %>;
+    window.deptChartData = <%- JSON.stringify(studentDeptCounts) %>;
+</script>
+<script src="/js/dashboard-charts.js"></script>

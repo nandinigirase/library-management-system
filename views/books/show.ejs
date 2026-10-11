@@ -1,0 +1,135 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title"><%= book.title %></h1>
+                    <div class="page-subtitle"><%= book.author %> • <%= book.category %></div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/books/<%= book._id %>/edit" class="btn btn-imrd-primary">Edit Book</a>
+                    <a href="/books" class="btn btn-outline-secondary">Back to Catalog</a>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <div class="book-cover-card h-100">
+                        <div class="book-cover-header" style="background: <%= book.coverColor %>;">
+                            <span class="book-cover-cat"><%= book.category.split(' ')[0] %></span>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <span class="book-cover-call"><%= book.callNumber %></span>
+                                <span class="badge bg-dark bg-opacity-50 small"><%= book.edition %></span>
+                            </div>
+                        </div>
+                        <div class="book-card-content">
+                            <h3 class="book-card-title"><%= book.title %></h3>
+                            <div class="book-card-author"><%= book.author %></div>
+                            <div class="mb-3">
+                                <span class="call-badge">ISBN: <%= book.isbn %></span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="status-badge <%= book.availableCopies > 0 ? 'status-available' : 'status-out' %>">
+                                    <%= book.availableCopies %> / <%= book.totalCopies %> Available
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">Book Details</h2>
+                        </div>
+                        <div class="imrd-card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6"><strong>Publisher:</strong> <%= book.publisher %></div>
+                                <div class="col-md-6"><strong>Publication Year:</strong> <%= book.publishYear %></div>
+                                <div class="col-md-6"><strong>Rack Number:</strong> <%= book.rackNumber %></div>
+                                <div class="col-md-6"><strong>Price:</strong> ₹<%= book.price %></div>
+                                <div class="col-12"><strong>Description:</strong> <%= book.description || 'No description provided.' %></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imrd-card mb-4">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Currently Issued</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (activeIssues && activeIssues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Issue Date</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% activeIssues.forEach(issue => { %>
+                                        <tr>
+                                            <td><%= issue.student ? issue.student.fullName : 'Unknown Student' %></td>
+                                            <td><%= new Date(issue.issueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><%= new Date(issue.dueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><span class="badge bg-warning text-dark"><%= issue.status %></span></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No active issues for this book.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="imrd-card">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Recent Returns</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (pastIssues && pastIssues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Return Date</th>
+                                        <th>Fine</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% pastIssues.forEach(issue => { %>
+                                        <tr>
+                                            <td><%= issue.student ? issue.student.fullName : 'Unknown Student' %></td>
+                                            <td><%= issue.returnDate ? new Date(issue.returnDate).toLocaleDateString('en-GB') : '-' %></td>
+                                            <td>₹<%= issue.fineAmount || 0 %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No prior return history recorded.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

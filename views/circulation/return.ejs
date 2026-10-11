@@ -1,0 +1,92 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Return & Renewal Desk</h1>
+                    <div class="page-subtitle">Track issued books, pay dues, and finalize returns</div>
+                </div>
+                <div>
+                    <a href="/circulation/issue" class="btn btn-imrd-primary">Issue New Book</a>
+                </div>
+            </div>
+
+            <div class="imrd-card mb-4">
+                <div class="imrd-card-body">
+                    <form action="/circulation/return" method="GET" class="row g-2 align-items-center">
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" name="q" value="<%= searchQuery %>" placeholder="Search by book title, call number, student name or ID">
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="submit" class="btn btn-imrd-primary w-100">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="imrd-card">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Active Loan Register</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (issues && issues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Book</th>
+                                        <th>Due Date</th>
+                                        <th>Overdue</th>
+                                        <th>Fine</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% issues.forEach(issue => { %>
+                                        <tr>
+                                            <td>
+                                                <div class="fw-semibold"><%= issue.student ? issue.student.fullName : 'Unknown' %></div>
+                                                <small class="text-muted"><%= issue.student ? issue.student.studentId : '' %></small>
+                                            </td>
+                                            <td>
+                                                <div class="fw-semibold"><%= issue.book ? issue.book.title : 'Unknown Book' %></div>
+                                                <small class="text-muted"><%= issue.book ? issue.book.callNumber : '' %></small>
+                                            </td>
+                                            <td><%= new Date(issue.dueDate).toLocaleDateString('en-GB') %></td>
+                                            <td><%= issue.currentOverdueDays || 0 %> days</td>
+                                            <td>₹<%= issue.calculatedFine || 0 %></td>
+                                            <td>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <form action="/circulation/return/<%= issue._id %>" method="POST" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-success">Return</button>
+                                                    </form>
+                                                    <form action="/circulation/renew/<%= issue._id %>" method="POST" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">Renew</button>
+                                                    </form>
+                                                    <a href="/circulation/slip/<%= issue._id %>" class="btn btn-sm btn-outline-secondary">Slip</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No active loan records found.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

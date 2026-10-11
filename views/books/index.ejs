@@ -1,0 +1,140 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <!-- Page Header -->
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Book Catalog & Inventory</h1>
+                    <div class="page-subtitle">Central Knowledge Resource Center • Complete repository of academic titles</div>
+                </div>
+                <div>
+                    <a href="/books/new" class="btn btn-imrd-gold">
+                        <i class="fa-solid fa-plus-circle me-1"></i> Add New Book
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filter & Search Bar -->
+            <div class="filter-bar">
+                <form action="/books" method="GET" class="row g-2 align-items-center">
+                    <div class="col-lg-5 col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0" name="q" value="<%= searchQuery %>" placeholder="Search by title, author, ISBN, or call number...">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-3">
+                        <select class="form-select" name="category" onchange="this.form.submit()">
+                            <option value="All">All Academic Categories</option>
+                            <% categories.forEach(cat => { %>
+                                <option value="<%= cat %>" <%= selectedCategory === cat ? 'selected' : '' %>><%= cat %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-12">
+                        <div class="book-stock-filter-controls">
+                            <select class="form-select book-stock-status" name="availability" onchange="this.form.submit()">
+                                <option value="all" <%= selectedAvailability === 'all' ? 'selected' : '' %>>All Stock Status</option>
+                                <option value="available" <%= selectedAvailability === 'available' ? 'selected' : '' %>>Available Now</option>
+                                <option value="out" <%= selectedAvailability === 'out' ? 'selected' : '' %>>Fully Issued Out</option>
+                            </select>
+                            <button type="submit" class="btn btn-imrd-primary book-stock-filter-button">
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Book Cards Grid -->
+            <% if (books && books.length > 0) { %>
+                <div class="row g-4">
+                    <% books.forEach(book => { %>
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="book-cover-card">
+                                <!-- Spine Header -->
+                                <div class="book-cover-header" style="background: <%= book.coverColor %>;">
+                                    <span class="book-cover-cat"><%= book.category.split(' ')[0] %></span>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <span class="book-cover-call"><%= book.callNumber %></span>
+                                        <span class="badge bg-dark bg-opacity-50 small"><%= book.edition %></span>
+                                    </div>
+                                </div>
+
+                                <!-- Card Content -->
+                                <div class="book-card-content">
+                                    <h3 class="book-card-title" title="<%= book.title %>">
+                                        <a href="/books/<%= book._id %>" class="text-decoration-none text-dark">
+                                            <%= book.title %>
+                                        </a>
+                                    </h3>
+                                    <div class="book-card-author">
+                                        <i class="fa-solid fa-pen-nib small me-1"></i> <%= book.author %>
+                                    </div>
+
+                                    <div class="mb-3 d-flex flex-wrap gap-1">
+                                        <span class="rack-badge">
+                                            <i class="fa-solid fa-map-pin"></i> <%= book.rackNumber %>
+                                        </span>
+                                        <span class="call-badge">
+                                            ISBN: <%= book.isbn %>
+                                        </span>
+                                    </div>
+
+                                    <!-- Stock Status & Action Buttons -->
+                                    <div class="book-card-footer">
+                                        <div>
+                                            <% if (book.availableCopies > 0) { %>
+                                                <span class="status-badge status-available">
+                                                    <%= book.availableCopies %> / <%= book.totalCopies %> Avail
+                                                </span>
+                                            <% } else { %>
+                                                <span class="status-badge status-out">
+                                                    0 / <%= book.totalCopies %> In Stock
+                                                </span>
+                                            <% } %>
+                                        </div>
+                                        <div class="d-flex gap-1">
+                                            <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-secondary" title="View Details">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
+                                            <a href="/books/<%= book._id %>/edit" class="btn btn-sm btn-outline-primary" title="Edit Book">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <% if (book.availableCopies > 0) { %>
+                                                <a href="/circulation/issue?bookId={{book._id}}" class="btn btn-sm btn-warning text-dark" title="Issue Book" href="/circulation/issue?bookId=<%= book._id %>">
+                                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                                </a>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="imrd-card text-center py-5">
+                    <div class="text-muted">
+                        <i class="fa-solid fa-book-open fs-1 text-secondary mb-3"></i>
+                        <h4>No books found matching your criteria</h4>
+                        <p class="mb-3">Try adjusting your search terms or filter selections.</p>
+                        <a href="/books" class="btn btn-outline-primary">Reset Filters</a>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

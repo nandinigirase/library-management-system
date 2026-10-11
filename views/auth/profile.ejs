@@ -1,0 +1,115 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <!-- Page Header -->
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Staff Profile & Security</h1>
+                    <div class="page-subtitle">Manage librarian account credentials and contact details</div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Profile Information Card -->
+                <div class="col-lg-6">
+                    <div class="imrd-card">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">
+                                <i class="fa-solid fa-user-gear text-primary"></i>
+                                <span>Librarian Information</span>
+                            </h2>
+                            <span class="badge bg-primary rounded-pill"><%= admin.role %></span>
+                        </div>
+                        <div class="imrd-card-body">
+                            <form action="/profile" method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="fullName" value="<%= admin.fullName %>" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Staff ID</label>
+                                        <input type="text" class="form-control bg-light" value="<%= admin.staffId %>" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control bg-light" value="<%= admin.username %>" readonly>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" name="email" value="<%= admin.email %>" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Contact Phone</label>
+                                        <input type="text" class="form-control" name="phone" value="<%= admin.phone %>">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Designation / Role</label>
+                                    <select class="form-select" name="role">
+                                        <option value="Chief Librarian" <%= admin.role === 'Chief Librarian' ? 'selected' : '' %>>Chief Librarian</option>
+                                        <option value="Assistant Librarian" <%= admin.role === 'Assistant Librarian' ? 'selected' : '' %>>Assistant Librarian</option>
+                                        <option value="System Administrator" <%= admin.role === 'System Administrator' ? 'selected' : '' %>>System Administrator</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-imrd-primary mt-2">
+                                    <i class="fa-solid fa-floppy-disk me-1"></i> Save Changes
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Password Card -->
+                <div class="col-lg-6">
+                    <div class="imrd-card">
+                        <div class="imrd-card-header">
+                            <h2 class="imrd-card-title">
+                                <i class="fa-solid fa-lock text-warning"></i>
+                                <span>Change Security Password</span>
+                            </h2>
+                        </div>
+                        <div class="imrd-card-body">
+                            <form action="/profile/change-password" method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" name="currentPassword" required placeholder="Enter current password">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" class="form-control" name="newPassword" minlength="6" required placeholder="At least 6 characters">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" name="confirmPassword" minlength="6" required placeholder="Repeat new password">
+                                </div>
+
+                                <div class="alert alert-secondary small d-flex align-items-center mb-3">
+                                    <i class="fa-solid fa-shield-halved me-2 text-warning fs-5"></i>
+                                    <div>Use strong passwords combining letters, numbers, and symbols to ensure library records security.</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-warning text-dark fw-bold">
+                                    <i class="fa-solid fa-key me-1"></i> Update Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Issue Book to Student</h1>
+                    <div class="page-subtitle">Issue circulation desk for active members</div>
+                </div>
+                <div>
+                    <a href="/circulation/return" class="btn btn-outline-secondary">Return Desk</a>
+                </div>
+            </div>
+
+            <div class="imrd-card">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title"><i class="fa-solid fa-arrow-up-right-from-square text-success"></i> New Issue Request</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <form action="/circulation/issue" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Select Book <span class="text-danger">*</span></label>
+                                <select class="form-select" name="bookId" required>
+                                    <option value="" disabled <%= !preSelectedBookId ? 'selected' : '' %>>Choose a book</option>
+                                    <% books.forEach(book => { %>
+                                        <option value="<%= book._id %>" <%= preSelectedBookId && String(book._id) === String(preSelectedBookId) ? 'selected' : '' %>>
+                                            <%= book.title %> — <%= book.callNumber %> (<%= book.availableCopies %> available)
+                                        </option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Select Student <span class="text-danger">*</span></label>
+                                <select class="form-select" name="studentId" required>
+                                    <option value="" disabled <%= !preSelectedStudentId ? 'selected' : '' %>>Choose a student</option>
+                                    <% students.forEach(student => { %>
+                                        <option value="<%= student._id %>" <%= preSelectedStudentId && String(student._id) === String(preSelectedStudentId) ? 'selected' : '' %>>
+                                            <%= student.fullName %> — <%= student.studentId %>
+                                        </option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Due Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="dueDate" value="<%= defaultDueDate %>" required>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label class="form-label">Remarks</label>
+                                <input type="text" class="form-control" name="remarks" placeholder="Optional notes for issuing desk">
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a href="/dashboard" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-imrd-gold px-4">
+                                <i class="fa-solid fa-hand-holding-box me-1"></i> Issue Book
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

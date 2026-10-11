@@ -1,0 +1,96 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Student Members</h1>
+                    <div class="page-subtitle">Library membership registry and circulation activity</div>
+                </div>
+                <div>
+                    <a href="/students/new" class="btn btn-imrd-gold">
+                        <i class="fa-solid fa-user-plus me-1"></i> Register Student
+                    </a>
+                </div>
+            </div>
+
+            <div class="imrd-card mb-4">
+                <div class="imrd-card-body">
+                    <form action="/students" method="GET" class="row g-2 align-items-center">
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="q" value="<%= searchQuery %>" placeholder="Search by student ID, name, email or phone">
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-select" name="department" onchange="this.form.submit()">
+                                <option value="All">All Departments</option>
+                                <% departments.forEach(dept => { %>
+                                    <option value="<%= dept %>" <%= selectedDepartment === dept ? 'selected' : '' %>><%= dept %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-select" name="status" onchange="this.form.submit()">
+                                <option value="All" <%= selectedStatus === 'All' ? 'selected' : '' %>>All Statuses</option>
+                                <option value="Active" <%= selectedStatus === 'Active' ? 'selected' : '' %>>Active</option>
+                                <option value="Suspended" <%= selectedStatus === 'Suspended' ? 'selected' : '' %>>Suspended</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="submit" class="btn btn-imrd-primary w-100">
+                                <i class="fa-solid fa-filter" aria-hidden="true"></i>
+                                <span>Filter</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <% if (students && students.length > 0) { %>
+                <div class="row g-4">
+                    <% students.forEach(student => { %>
+                        <div class="col-lg-6 col-xl-4">
+                            <div class="imrd-card h-100">
+                                <div class="imrd-card-header">
+                                    <div>
+                                        <h3 class="imrd-card-title mb-0"><%= student.fullName %></h3>
+                                        <small class="text-muted"><%= student.studentId %></small>
+                                        <div>
+                                            <span class="badge <%= student.status === 'Active' ? 'bg-success' : 'bg-secondary' %>"><%= student.status %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="imrd-card-body">
+                                    <div class="mb-2"><strong>Department:</strong> <%= student.department %></div>
+                                    <div class="mb-2"><strong>Academic Year:</strong> <%= student.academicYear %></div>
+                                    <div class="mb-2"><strong>Email:</strong> <%= student.email %></div>
+                                    <div class="mb-2"><strong>Phone:</strong> <%= student.phone %></div>
+                                    <div class="mb-3"><strong>Books Issued:</strong> <%= student.currentIssuedCount || 0 %> / <%= student.maxAllowedBooks || 3 %></div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a href="/students/<%= student._id %>" class="btn btn-sm btn-outline-primary">View Profile</a>
+                                        <a href="/students/<%= student._id %>/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <a href="/circulation/issue?studentId=<%= student._id %>" class="btn btn-sm btn-warning text-dark">Issue Book</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="imrd-card text-center py-5">
+                    <h4>No student records found</h4>
+                    <p class="text-muted mb-3">Try adjusting your search or register a new member.</p>
+                    <a href="/students/new" class="btn btn-imrd-primary">Add New Student</a>
+                </div>
+            <% } %>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

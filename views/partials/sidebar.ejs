@@ -1,0 +1,93 @@
+<aside class="app-sidebar" id="app-sidebar">
+    <!-- Brand & Emblem Header -->
+    <div class="sidebar-brand-header">
+        <div class="brand-emblem-wrapper">
+            <div class="brand-crest">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="brand-titles">
+                <span class="brand-title-main">IMRD SHAHADA</span>
+                <span class="brand-title-sub">CENTRAL LIBRARY</span>
+                <span class="brand-location">Est. 1997 • KBCNMU</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Issue Shortcut -->
+    <div class="sidebar-quick-action mt-3">
+        <a href="/circulation/issue" class="btn-sidebar-quick">
+            <i class="fa-solid fa-plus-circle"></i>
+            <span>Issue Book Now</span>
+        </a>
+    </div>
+
+    <!-- Navigation Section -->
+    <div class="sidebar-nav-section">
+        <div class="nav-section-title">Core Management</div>
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item">
+                <a href="/dashboard" class="sidebar-nav-link <%= currentPath === '/dashboard' || currentPath === '/' ? 'active' : '' %>">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/books" class="sidebar-nav-link <%= currentPath.startsWith('/books') ? 'active' : '' %>">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>Books Catalog</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/students" class="sidebar-nav-link <%= currentPath.startsWith('/students') || currentPath.startsWith('/members') ? 'active' : '' %>">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span>Students / Members</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="nav-section-title">Circulation Desk</div>
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item">
+                <a href="/circulation/issue" class="sidebar-nav-link <%= currentPath === '/circulation/issue' ? 'active' : '' %>">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span>Issue Book</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/circulation/return" class="sidebar-nav-link <%= currentPath === '/circulation/return' ? 'active' : '' %>">
+                    <i class="fa-solid fa-arrow-down-left-and-up-right-to-center"></i>
+                    <span>Return / Renew Desk</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/circulation/overdue" class="sidebar-nav-link <%= currentPath === '/circulation/overdue' ? 'active' : '' %>">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Overdue & Fines</span>
+                    <span class="badge bg-danger sidebar-badge">Alerts</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="nav-section-title">Administration</div>
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item">
+                <a href="/reports" class="sidebar-nav-link <%= currentPath.startsWith('/reports') ? 'active' : '' %>">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Audit & Reports</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="/profile" class="sidebar-nav-link <%= currentPath === '/profile' ? 'active' : '' %>">
+                    <i class="fa-solid fa-id-badge"></i>
+                    <span>Staff Profile</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item mt-3">
+                <a href="/logout" class="sidebar-nav-link text-danger">
+                    <i class="fa-solid fa-right-from-bracket text-danger"></i>
+                    <span>Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</aside>

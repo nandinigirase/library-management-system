@@ -1,0 +1,130 @@
+<%- include('../partials/header') %>
+
+<div class="app-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="app-main">
+        <%- include('../partials/navbar') %>
+
+        <div class="page-body-container">
+            <%- include('../partials/alerts') %>
+
+            <div class="page-header-banner">
+                <div>
+                    <h1 class="page-title">Audit Reports & Analytics</h1>
+                    <div class="page-subtitle">Circulation and financial summary of IMRD library</div>
+                </div>
+                <div>
+                    <a href="/reports/export-csv" class="btn btn-imrd-gold">Export CSV</a>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-body">
+                            <div class="text-muted small text-uppercase">Transactions</div>
+                            <div class="fs-3 fw-bold"><%= summary.totalTransactions %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-body">
+                            <div class="text-muted small text-uppercase">Issued</div>
+                            <div class="fs-3 fw-bold text-primary"><%= summary.totalIssued %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-body">
+                            <div class="text-muted small text-uppercase">Returned</div>
+                            <div class="fs-3 fw-bold text-success"><%= summary.totalReturned %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="imrd-card h-100">
+                        <div class="imrd-card-body">
+                            <div class="text-muted small text-uppercase">Overdue</div>
+                            <div class="fs-3 fw-bold text-danger"><%= summary.totalOverdue %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imrd-card mb-4">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Filter Transactions</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <form action="/reports" method="GET" class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status">
+                                <option value="All" <%= filters.status === 'All' ? 'selected' : '' %>>All</option>
+                                <option value="ISSUED" <%= filters.status === 'ISSUED' ? 'selected' : '' %>>Issued</option>
+                                <option value="OVERDUE" <%= filters.status === 'OVERDUE' ? 'selected' : '' %>>Overdue</option>
+                                <option value="RETURNED" <%= filters.status === 'RETURNED' ? 'selected' : '' %>>Returned</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="form-control" name="department" value="<%= filters.department %>" placeholder="e.g. MCA">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">From</label>
+                            <input type="date" class="form-control" name="startDate" value="<%= filters.startDate %>">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">To</label>
+                            <input type="date" class="form-control" name="endDate" value="<%= filters.endDate %>">
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-imrd-primary">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="imrd-card">
+                <div class="imrd-card-header">
+                    <h2 class="imrd-card-title">Transaction Log</h2>
+                </div>
+                <div class="imrd-card-body">
+                    <% if (issues && issues.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Book</th>
+                                        <th>Issue Date</th>
+                                        <th>Status</th>
+                                        <th>Fine</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% issues.forEach(issue => { %>
+                                        <tr>
+                                            <td><%= issue.student ? issue.student.fullName : 'Unknown' %></td>
+                                            <td><%= issue.book ? issue.book.title : 'Unknown Book' %></td>
+                                            <td><%= issue.issueDate ? new Date(issue.issueDate).toLocaleDateString('en-GB') : '-' %></td>
+                                            <td><span class="badge <%= issue.status === 'RETURNED' ? 'bg-success' : issue.status === 'OVERDUE' ? 'bg-danger' : 'bg-warning text-dark' %>"><%= issue.status %></span></td>
+                                            <td>₹<%= issue.fineAmount || 0 %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted mb-0">No transactions match the current filters.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+    </div>
+</div>

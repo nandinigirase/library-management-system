@@ -1,0 +1,46 @@
+<header class="app-topbar">
+    <div class="topbar-left">
+        <button class="topbar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="college-motto-badge d-none d-md-inline-flex">
+            <i class="fa-solid fa-award text-warning"></i>
+            <span>IMRD, SHAHADA • Central Knowledge Resource Center</span>
+        </div>
+    </div>
+
+    <div class="topbar-right">
+        <!-- Live Clock -->
+        <div class="digital-clock d-none d-lg-flex">
+            <i class="fa-regular fa-clock text-warning"></i>
+            <span id="digital-clock-time">Loading time...</span>
+        </div>
+
+        <!-- Overdue Quick Alert Icon -->
+        <a href="/circulation/overdue" class="btn btn-sm btn-outline-danger position-relative rounded-pill px-3 py-1" title="Overdue Notices">
+            <i class="fa-solid fa-bell"></i>
+            <span class="d-none d-sm-inline ms-1">Overdue</span>
+        </a>
+
+        <!-- Admin Profile Pill -->
+        <div class="dropdown">
+            <a href="#" class="admin-profile-pill dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="admin-avatar">
+                    <%= currentAdmin ? currentAdmin.fullName.charAt(0) : 'L' %>
+                </div>
+                <div class="admin-info d-none d-sm-block text-start">
+                    <div class="admin-name"><%= currentAdmin ? currentAdmin.fullName : 'Librarian' %></div>
+                    <div class="admin-role"><%= currentAdmin ? currentAdmin.role : 'Staff' %></div>
+                </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
+                <li><h6 class="dropdown-header text-uppercase font-monospace" style="font-size: 0.72rem;">Library Administration</h6></li>
+                <li><a class="dropdown-item py-2" href="/profile"><i class="fa-solid fa-id-card-clip me-2 text-primary"></i>Profile & Password</a></li>
+                <li><a class="dropdown-item py-2" href="/reports"><i class="fa-solid fa-chart-line me-2 text-success"></i>Circulation Reports</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item py-2 text-danger" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i>Sign Out</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

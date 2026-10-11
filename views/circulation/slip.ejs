@@ -1,0 +1,66 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0">IMRD Shahada Central Library</h4>
+                        <small>Issue / Return Transaction Slip</small>
+                    </div>
+                    <span class="badge bg-light text-dark">#<%= issue._id.toString().slice(-6).toUpperCase() %></span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Student:</strong> <%= issue.student ? issue.student.fullName : 'Unknown' %><br>
+                            <strong>ID:</strong> <%= issue.student ? issue.student.studentId : '-' %>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <strong>Book:</strong> <%= issue.book ? issue.book.title : 'Unknown Book' %><br>
+                            <strong>Call No:</strong> <%= issue.book ? issue.book.callNumber : '-' %>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Issue Date:</strong><br>
+                            <%= new Date(issue.issueDate).toLocaleDateString('en-GB') %>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Due Date:</strong><br>
+                            <%= new Date(issue.dueDate).toLocaleDateString('en-GB') %>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Status:</strong><br>
+                            <span class="badge bg-success"><%= issue.status %></span>
+                        </div>
+                    </div>
+
+                    <div class="border rounded p-3 bg-light">
+                        <div class="d-flex justify-content-between">
+                            <span>Fine Amount</span>
+                            <strong>₹<%= issue.fineAmount || 0 %></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Fine Paid</span>
+                            <strong><%= issue.finePaid ? 'YES' : 'NO' %></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Remarks</span>
+                            <strong><%= issue.remarks || issue.returnRemarks || '—' %></strong>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-between gap-2">
+                        <a href="/circulation/return" class="btn btn-outline-secondary">Back to Desk</a>
+                        <button class="btn btn-imrd-primary" onclick="window.print()">Print Slip</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
